@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spin the Wheel – Free Online Random Wheel Spinner | WheelPicker</title>
+  <meta name="description" content="Spin the Wheel online – free random wheel spinner for decisions, games, classrooms & giveaways. Customise your spinning wheel in seconds. No sign-up required." />
+  <meta name="keywords" content="spin the wheel, random wheel, wheel picker, spinning wheel, random wheel generator, decision wheel, lucky wheel, online spinner, wheel spinner custom, deciding wheel" />
+  <link rel="canonical" href="https://wheelpicker.github.io/" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wheelpicker.github.io/" />
+  <meta property="og:title" content="Spin the Wheel – Free Online Random Wheel Spinner" />
+  <meta property="og:description" content="Free random wheel spinner. Customise colours, names & sounds. Spin for decisions, giveaways, classrooms & games." />
+  <meta property="og:image" content="https://wheelpicker.github.io/og-image.png" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Spin the Wheel – WheelPicker" />
+  <meta name="twitter:description" content="Free online spinning wheel. Add names, spin & decide instantly." />
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "WheelPicker – Spin the Wheel",
+    "url": "https://wheelpicker.github.io/",
+    "description": "A free online random wheel spinner for decisions, giveaways, classrooms and games. Supports custom wheel types, colours and sounds.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Custom wheel entries",
+      "Multiple wheel types",
+      "Sound effects",
+      "Full screen mode",
+      "Result history",
+      "Mobile compatible"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I spin the wheel?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Click or tap the big SPIN button below the wheel, or click directly on the wheel canvas. The wheel will spin and land on a random entry." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I add my own names to the wheel?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes! Type your entries in the sidebar list, one per line, and the wheel updates instantly." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the wheel truly random?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. WheelPicker uses cryptographically seeded Math.random() to ensure each spin is unbiased." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use WheelPicker on mobile?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. WheelPicker is fully responsive and touch-friendly on all devices." }
+      }
+    ]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ── DESIGN TOKENS ─────────────────────────────────────── */
+    :root {
+      --bg:       #07080f;
+      --bg2:      #0d0f1c;
+      --bg3:      #12152a;
+      --surface:  #181c35;
+      --border:   rgba(255,255,255,.07);
+      --accent:   #ff4d6d;
+      --accent2:  #ff9f1c;
+      --accent3:  #06d6a0;
+      --accent4:  #4cc9f0;
+      --text:     #f0f2ff;
+      --muted:    #7b82a8;
+      --radius:   18px;
+      --spin-dur: 4s;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: var(--font-body); border: none; outline: none; }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .45;
+    }
+
+    /* ── HEADER ────────────────────────────────────────────── */
+    #site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1rem,4vw,3rem);
+      height: 64px;
+      background: rgba(7,8,15,.85);
+      backdrop-filter: blur(18px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s;
+    }
+    .logo {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -.02em;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: conic-gradient(var(--accent) 0 60deg, var(--accent2) 60deg 120deg, var(--accent3) 120deg 180deg, var(--accent4) 180deg 240deg, var(--accent) 240deg 300deg, var(--accent2) 300deg 360deg);
+      border-radius: 50%;
+      animation: spinLogo 8s linear infinite;
+    }
+    @keyframes spinLogo { to { transform: rotate(360deg); } }
+    .logo span { background: linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    nav { display: flex; align-items: center; gap: clamp(.8rem,2vw,2rem); }
+    nav a {
+      font-size: .85rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+      color: var(--muted); transition: color .2s;
+    }
+    nav a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      padding: .45rem 1.1rem; border-radius: 50px;
+      font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      transition: opacity .2s, transform .15s;
+    }
+    .nav-cta:hover { opacity: .85; transform: translateY(-1px); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; padding: .2rem; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+    .mobile-nav {
+      display: none; position: fixed; inset: 64px 0 0; z-index: 99;
+      background: rgba(7,8,15,.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { font-size: 1.4rem; font-weight: 600; }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      padding-top: 64px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      position: relative; overflow: hidden;
+      padding-inline: 1rem;
+    }
+    .hero-glow {
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,77,109,.18) 0%, transparent 70%);
+      pointer-events: none; animation: pulse 6s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.1)} }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,77,109,.12); border: 1px solid rgba(255,77,109,.3);
+      border-radius: 50px; padding: .35rem 1rem;
+      font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge::before { content: '✦'; }
+    h1.hero-title {
+      font-family: var(--font-head); font-weight: 800;
+      font-size: clamp(2.8rem, 8vw, 7rem);
+      line-height: 1.0; letter-spacing: -.04em;
+      margin-bottom: 1.2rem;
+      animation: fadeUp .7s .1s ease both;
+    }
+    h1.hero-title span {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(1rem,2vw,1.25rem); color: var(--muted); max-width: 560px;
+      margin-bottom: 2.5rem; animation: fadeUp .7s .2s ease both;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: fadeUp .7s .3s ease both; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-weight: 700; font-size: 1rem;
+      padding: .85rem 2.2rem; border-radius: 50px;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 0 30px rgba(255,77,109,.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(255,77,109,.55); }
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      padding: .85rem 2.2rem; border-radius: 50px; font-size: 1rem; font-weight: 500;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); background: rgba(255,77,109,.06); }
+    .hero-scroll { margin-top: 4rem; color: var(--muted); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: .6rem; animation: fadeUp .7s .5s ease both; }
+    .scroll-dot { width: 6px; height: 32px; border: 1.5px solid var(--border); border-radius: 3px; position: relative; overflow: hidden; }
+    .scroll-dot::after { content: ''; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 3px; height: 8px; background: var(--accent); border-radius: 2px; animation: scrollDot 1.5s ease-in-out infinite; }
+    @keyframes scrollDot { 0%,100%{top:4px} 50%{top:14px} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── SPINNER APP ───────────────────────────────────────── */
+    #spinner-app {
+      padding: 80px clamp(1rem,4vw,3rem) 100px;
+      position: relative; z-index: 1;
+    }
+    .section-label {
+      text-align: center; font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: .8rem;
+    }
+    .section-title {
+      text-align: center;
+      font-family: var(--font-head); font-weight: 800;
+      font-size: clamp(1.8rem,4vw,3rem); letter-spacing: -.03em;
+      margin-bottom: .8rem;
+    }
+    .section-subtitle { text-align: center; color: var(--muted); max-width: 520px; margin: 0 auto 3rem; }
+
+    /* Wheel type tabs */
+    .wheel-tabs {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-bottom: 2.5rem;
+    }
+    .wheel-tab {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); padding: .5rem 1.2rem; border-radius: 50px;
+      font-size: .82rem; font-weight: 600; letter-spacing: .03em;
+      transition: all .2s;
+    }
+    .wheel-tab.active, .wheel-tab:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* Main spinner layout */
+    .spinner-layout {
+      display: grid;
+      grid-template-columns: 1fr min(520px,50vw) 1fr;
+      gap: 2rem; align-items: start;
+      max-width: 1200px; margin: 0 auto;
+    }
+    @media(max-width:900px) {
+      .spinner-layout { grid-template-columns: 1fr; }
+      .spinner-layout .panel-left { order: 2; }
+      .spinner-layout .panel-center { order: 1; }
+      .spinner-layout .panel-right { order: 3; }
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+    }
+    .panel h3 { font-family: var(--font-head); font-size: 1rem; margin-bottom: 1rem; color: var(--text); }
+
+    /* Canvas wrapper */
+    .wheel-wrap {
+      position: relative; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    }
+    .canvas-outer {
+      position: relative; display: inline-block;
+      filter: drop-shadow(0 0 40px rgba(255,77,109,.3));
+    }
+    #wheelCanvas { display: block; cursor: pointer; touch-action: manipulation; }
+    .wheel-pointer {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 28px solid var(--accent);
+      filter: drop-shadow(0 4px 8px rgba(255,77,109,.5));
+      z-index: 5;
+    }
+    .spin-btn {
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      color: #fff; font-family: var(--font-head); font-weight: 800;
+      font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase;
+      width: 100%; padding: 1rem; border-radius: 12px;
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+      box-shadow: 0 8px 30px rgba(255,77,109,.4);
+    }
+    .spin-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,77,109,.55); }
+    .spin-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* Controls */
+    .ctrl-group { margin-bottom: 1.2rem; }
+    .ctrl-group label { display: block; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .ctrl-group input[type=text],
+    .ctrl-group select,
+    .ctrl-group textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border);
+      color: var(--text); border-radius: 10px; padding: .6rem .85rem; font-family: var(--font-body); font-size: .9rem;
+      transition: border-color .2s;
+    }
+    .ctrl-group input[type=text]:focus,
+    .ctrl-group select:focus,
+    .ctrl-group textarea:focus { outline: none; border-color: var(--accent); }
+    .ctrl-group textarea { resize: vertical; min-height: 140px; }
+    .ctrl-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%237b82a8'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .8rem center; padding-right: 2rem; }
+    .ctrl-row { display: flex; gap: .6rem; }
+    .ctrl-row .btn-sm { flex: 1; background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: .55rem; border-radius: 8px; font-size: .8rem; font-weight: 600; transition: all .2s; }
+    .ctrl-row .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* History */
+    .history-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; max-height: 260px; overflow-y: auto; }
+    .history-list::-webkit-scrollbar { width: 4px; }
+    .history-list::-webkit-scrollbar-track { background: transparent; }
+    .history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .history-item {
+      display: flex; align-items: center; gap: .6rem;
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+      padding: .5rem .8rem; font-size: .85rem;
+      animation: slideIn .3s ease;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
+    .history-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .history-spin { color: var(--muted); font-size: .7rem; margin-left: auto; }
+
+    /* Result modal */
+    .result-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(7,8,15,.85); backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .result-overlay.show { opacity: 1; pointer-events: all; }
+    .result-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 2.5rem 3rem; text-align: center; max-width: 420px; width: 90%;
+      transform: scale(.85); transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+      position: relative;
+    }
+    .result-overlay.show .result-card { transform: scale(1); }
+    .result-emoji { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+    .result-label { font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .result-winner {
+      font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem,5vw,2.8rem);
+      letter-spacing: -.03em;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+    .result-actions { display: flex; gap: .8rem; justify-content: center; }
+    .btn-close-result { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: .65rem 1.5rem; border-radius: 50px; font-weight: 600; transition: all .2s; }
+    .btn-close-result:hover { border-color: var(--accent); }
+    .btn-spin-again { background: var(--accent); color: #fff; padding: .65rem 1.5rem; border-radius: 50px; font-weight: 700; transition: opacity .2s; }
+    .btn-spin-again:hover { opacity: .85; }
+    .confetti-canvas { position: fixed; inset: 0; z-index: 201; pointer-events: none; }
+
+    /* ── WHEEL TYPES SHOWCASE ──────────────────────────────── */
+    #wheel-types { padding: 100px clamp(1rem,4vw,3rem); position: relative; z-index: 1; }
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 1.2rem; max-width: 1200px; margin: 0 auto;
+    }
+    .type-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.8rem 1.5rem;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      cursor: pointer; position: relative; overflow: hidden;
+    }
+    .type-card::before {
+      content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .3s;
+      background: radial-gradient(circle at 30% 30%, rgba(255,77,109,.12), transparent 70%);
+    }
+    .type-card:hover { transform: translateY(-5px); border-color: rgba(255,77,109,.4); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+    .type-card:hover::before { opacity: 1; }
+    .type-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .type-card h3 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .type-card p { font-size: .85rem; color: var(--muted); }
+    .type-tag { display: inline-block; margin-top: .8rem; font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .7rem; border-radius: 50px; background: rgba(255,77,109,.12); color: var(--accent); }
+
+    /* ── HOW IT WORKS ──────────────────────────────────────── */
+    #how-it-works { padding: 100px clamp(1rem,4vw,3rem); background: var(--bg2); position: relative; z-index: 1; }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+    .step-card { text-align: center; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-weight: 800; font-size: 1.3rem;
+      margin: 0 auto 1.2rem; box-shadow: 0 0 30px rgba(255,77,109,.4);
+    }
+    .step-card h3 { font-family: var(--font-head); font-weight: 700; margin-bottom: .5rem; }
+    .step-card p { font-size: .9rem; color: var(--muted); }
+
+    /* ── FEATURES ──────────────────────────────────────────── */
+    #features { padding: 100px clamp(1rem,4vw,3rem); position: relative; z-index: 1; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1.2rem; max-width: 1100px; margin: 0 auto; }
+    .feature-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.8rem;
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      transition: border-color .2s, transform .2s;
+    }
+    .feature-card:hover { border-color: rgba(6,214,160,.3); transform: translateY(-3px); }
+    .feature-icon {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(6,214,160,.12); display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .feature-card h3 { font-family: var(--font-head); font-weight: 700; font-size: .95rem; margin-bottom: .4rem; }
+    .feature-card p { font-size: .85rem; color: var(--muted); }
+
+    /* ── USE CASES ─────────────────────────────────────────── */
+    #use-cases { padding: 100px clamp(1rem,4vw,3rem); background: var(--bg2); position: relative; z-index: 1; }
+    .uses-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1rem; max-width: 1100px; margin: 0 auto; }
+    .use-card {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.5rem; text-align: center; transition: all .2s;
+    }
+    .use-card:hover { border-color: rgba(76,201,240,.4); transform: translateY(-4px); }
+    .use-card .uc-icon { font-size: 2.4rem; margin-bottom: .8rem; }
+    .use-card h3 { font-family: var(--font-head); font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+    .use-card p { font-size: .82rem; color: var(--muted); }
+
+    /* ── CONTENT SECTION ───────────────────────────────────── */
+    #content-section { padding: 100px clamp(1rem,4vw,3rem); position: relative; z-index: 1; }
+    .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1100px; margin: 0 auto; align-items: center; }
+    @media(max-width:700px){ .content-grid { grid-template-columns: 1fr; } }
+    .content-text h2 { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.6rem,3vw,2.4rem); letter-spacing: -.03em; margin-bottom: 1rem; }
+    .content-text p { color: var(--muted); margin-bottom: 1rem; font-size: .95rem; }
+    .content-text ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-top: 1.2rem; }
+    .content-text ul li { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; }
+    .content-text ul li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: .1rem; }
+    .content-visual {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+      padding: 2rem; display: flex; align-items: center; justify-content: center;
+      min-height: 300px; position: relative; overflow: hidden;
+    }
+    .mini-wheel-demo { position: relative; }
+    .mini-wheel-demo canvas { animation: floatWheel 3s ease-in-out infinite; }
+    @keyframes floatWheel { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+    /* ── SEO / KEYWORDS SECTION ────────────────────────────── */
+    #seo-content { padding: 100px clamp(1rem,4vw,3rem); background: var(--bg2); position: relative; z-index: 1; }
+    .seo-cols { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto; }
+    .seo-block h3 { font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; margin-bottom: .8rem; color: var(--text); }
+    .seo-block p { font-size: .88rem; color: var(--muted); line-height: 1.7; }
+    .keyword-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .keyword-chip { background: var(--bg3); border: 1px solid var(--border); border-radius: 50px; padding: .25rem .75rem; font-size: .73rem; font-weight: 500; color: var(--muted); }
+
+    /* ── FAQ ───────────────────────────────────────────────── */
+    #faq { padding: 100px clamp(1rem,4vw,3rem); position: relative; z-index: 1; }
+    .faq-list { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: .8rem; }
+    .faq-item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; text-align: left; background: none; color: var(--text);
+      padding: 1.2rem 1.5rem; font-family: var(--font-head); font-weight: 700; font-size: .95rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      transition: color .2s;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-icon { flex-shrink: 0; font-size: 1.2rem; transition: transform .3s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--accent); }
+    .faq-a { display: none; padding: 0 1.5rem 1.2rem; color: var(--muted); font-size: .9rem; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── CTA BANNER ────────────────────────────────────────── */
+    #cta-banner {
+      padding: 100px clamp(1rem,4vw,3rem); position: relative; z-index: 1; text-align: center; overflow: hidden;
+    }
+    .cta-inner {
+      max-width: 720px; margin: 0 auto;
+      background: linear-gradient(135deg, rgba(255,77,109,.12), rgba(255,159,28,.08));
+      border: 1px solid rgba(255,77,109,.25); border-radius: 32px;
+      padding: clamp(2.5rem,5vw,4rem) clamp(1.5rem,4vw,3rem);
+      position: relative; overflow: hidden;
+    }
+    .cta-inner::before {
+      content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle,rgba(255,77,109,.15),transparent 70%);
+    }
+    .cta-inner h2 { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem,4vw,3rem); letter-spacing: -.03em; margin-bottom: 1rem; }
+    .cta-inner p { color: var(--muted); margin-bottom: 2rem; font-size: 1rem; }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    #site-footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: clamp(2.5rem,5vw,4rem) clamp(1rem,4vw,3rem) 1.5rem;
+      position: relative; z-index: 1;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr repeat(3,1fr); gap: 2.5rem; max-width: 1200px; margin: 0 auto 3rem; }
+    @media(max-width:700px){ .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:480px){ .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand p { font-size: .85rem; color: var(--muted); margin-top: .8rem; max-width: 260px; line-height: 1.6; }
+    .footer-col h4 { font-family: var(--font-head); font-weight: 700; font-size: .85rem; letter-spacing: .05em; text-transform: uppercase; color: var(--text); margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .footer-col ul li a { font-size: .85rem; color: var(--muted); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--accent); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .8rem; }
+    .footer-bottom p { font-size: .8rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .8rem; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── FLOATING ORBS (decorative) ───────────────────────── */
+    .orb {
+      position: fixed; border-radius: 50%; pointer-events: none; filter: blur(80px); opacity: .06; z-index: 0;
+    }
+    .orb-1 { width: 500px; height: 500px; background: var(--accent); top: 20%; left: -200px; animation: orb1 20s ease-in-out infinite; }
+    .orb-2 { width: 400px; height: 400px; background: var(--accent4); top: 60%; right: -150px; animation: orb2 18s ease-in-out infinite; }
+    .orb-3 { width: 300px; height: 300px; background: var(--accent3); bottom: 10%; left: 30%; animation: orb3 22s ease-in-out infinite; }
+    @keyframes orb1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-80px)} }
+    @keyframes orb2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(60px)} }
+    @keyframes orb3 { 0%,100%{transform:translateX(0)} 50%{transform:translateX(40px)} }
+
+    /* ── STATS TICKER ──────────────────────────────────────── */
+    .stats-bar {
+      background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 1.2rem 0; overflow: hidden; position: relative; z-index: 1;
+    }
+    .stats-inner { display: flex; gap: 3rem; width: max-content; animation: ticker 20s linear infinite; }
+    .stat-pill { display: flex; align-items: center; gap: .7rem; flex-shrink: 0; }
+    .stat-pill strong { font-family: var(--font-head); font-size: 1.1rem; color: var(--text); }
+    .stat-pill span { font-size: .8rem; color: var(--muted); }
+    .stat-sep { color: var(--border); }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── MISC ──────────────────────────────────────────────── */
+    .accent-text { color: var(--accent); }
+    .gradient-text { background: linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media(max-width:768px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Decorative orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- Result overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+  <div class="result-card">
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-label">The wheel has spoken!</div>
+    <div class="result-winner" id="resultWinner">–</div>
+    <div class="result-actions">
+      <button class="btn-close-result" id="btnCloseResult">Close</button>
+      <button class="btn-spin-again" id="btnSpinAgain">Spin Again ↺</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── HEADER (JS component) ──────────────────────────────── -->
+<header id="site-header"></header>
+<nav class="mobile-nav" id="mobileNav"></nav>
+
+<!-- ── HERO ───────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">Free Online Spinner · No Sign-up</div>
+  <h1 class="hero-title">Spin the<br><span>Wheel</span></h1>
+  <p class="hero-subtitle hero-sub">The most customisable random wheel spinner on the web. Add names, numbers, colours, decisions — and let fate decide in style.</p>
+  <div class="hero-btns">
+    <a href="#spinner-app" class="btn-primary">Launch Wheel ↓</a>
+    <a href="#wheel-types" class="btn-ghost">Explore Types</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-dot"></div>
+    Scroll to spin
+  </div>
+</section>
+
+<!-- ── STATS BAR ───────────────────────────────────────────── -->
+<div class="stats-bar">
+  <div class="stats-inner" id="statsInner"></div>
+</div>
+
+<!-- ── SPINNER APP ─────────────────────────────────────────── -->
+<section id="spinner-app">
+  <div class="section-label">Interactive</div>
+  <h2 class="section-title">Your Random <span class="gradient-text">Wheel Picker</span></h2>
+  <p class="section-subtitle">Customise entries, pick a style, and spin. Results are instant, unbiased, and always surprising.</p>
+
+  <div class="wheel-tabs" id="wheelTabs"></div>
+
+  <div class="spinner-layout">
+    <!-- Left panel: entries -->
+    <div class="panel panel-left">
+      <h3>✏️ Wheel Entries</h3>
+      <div class="ctrl-group">
+        <label>Add entries (one per line)</label>
+        <textarea id="entriesTextarea">Alice
+Bob
+Charlie
+Diana
+Evan
+Fiona
+Grace
+Henry</textarea>
+      </div>
+      <div class="ctrl-row" style="margin-bottom:.8rem">
+        <button class="btn-sm" onclick="WheelApp.addEntry()">+ Add</button>
+        <button class="btn-sm" onclick="WheelApp.clearAll()">✕ Clear</button>
+        <button class="btn-sm" onclick="WheelApp.shuffle()">⇄ Shuffle</button>
+      </div>
+      <div class="ctrl-group">
+        <label>Colour Palette</label>
+        <select id="paletteSelect" onchange="WheelApp.changePalette(this.value)">
+          <option value="vibrant">🌈 Vibrant</option>
+          <option value="neon">⚡ Neon</option>
+          <option value="pastel">🌸 Pastel</option>
+          <option value="fire">🔥 Fire</option>
+          <option value="ocean">🌊 Ocean</option>
+          <option value="galaxy">🌌 Galaxy</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label>Spin Speed</label>
+        <select id="speedSelect">
+          <option value="slow">🐢 Slow</option>
+          <option value="normal" selected>🎯 Normal</option>
+          <option value="fast">⚡ Fast</option>
+          <option value="turbo">🚀 Turbo</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Center: wheel -->
+    <div class="panel-center">
+      <div class="wheel-wrap">
+        <div class="canvas-outer">
+          <div class="wheel-pointer"></div>
+          <canvas id="wheelCanvas" width="460" height="460" onclick="WheelApp.spin()"></canvas>
+        </div>
+        <button class="spin-btn" id="spinBtn" onclick="WheelApp.spin()">🎰 Spin the Wheel</button>
+      </div>
+    </div>
+
+    <!-- Right panel: settings + history -->
+    <div class="panel panel-right">
+      <h3>⚙️ Options</h3>
+      <div class="ctrl-group">
+        <label>Wheel Style</label>
+        <select id="styleSelect" onchange="WheelApp.changeStyle(this.value)">
+          <option value="classic">Classic Pie</option>
+          <option value="donut">Donut Ring</option>
+          <option value="slim">Slim Arc</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" id="soundToggle" checked style="accent-color:var(--accent)"> 🔊 Sound Effects
+        </label>
+      </div>
+      <div class="ctrl-group">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" id="removeWinner" style="accent-color:var(--accent)"> 🗑️ Remove winner after spin
+        </label>
+      </div>
+      <h3 style="margin-top:1.2rem">📋 Spin History</h3>
+      <ul class="history-list" id="historyList">
+        <li style="font-size:.82rem;color:var(--muted);padding:.4rem 0">No spins yet…</li>
+      </ul>
+      <button class="btn-sm" style="width:100%;margin-top:.8rem" onclick="WheelApp.clearHistory()">🗑 Clear History</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHEEL TYPES ──────────────────────────────────────────── -->
+<section id="wheel-types">
+  <div class="section-label">Wheel Varieties</div>
+  <h2 class="section-title">Every Kind of <span class="gradient-text">Spinning Wheel</span></h2>
+  <p class="section-subtitle">WheelPicker supports dozens of wheel configurations. Find the perfect random wheel generator for any occasion.</p>
+  <div class="types-grid" id="typesGrid"></div>
+</section>
+
+<!-- ── HOW IT WORKS ────────────────────────────────────────── -->
+<section id="how-it-works">
+  <div class="section-label">Getting Started</div>
+  <h2 class="section-title">How the <span class="gradient-text">Wheel Spinner</span> Works</h2>
+  <p class="section-subtitle">Three simple steps to a random decision — no downloads, no accounts, no fuss.</p>
+  <div class="steps-grid" id="stepsGrid"></div>
+</section>
+
+<!-- ── FEATURES ────────────────────────────────────────────── -->
+<section id="features">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title">Packed with <span class="gradient-text">Advanced Features</span></h2>
+  <p class="section-subtitle">WheelPicker goes far beyond a basic online spinner — every feature is designed to make your decisions effortless and fun.</p>
+  <div class="features-grid" id="featuresGrid"></div>
+</section>
+
+<!-- ── USE CASES ───────────────────────────────────────────── -->
+<section id="use-cases">
+  <div class="section-label">Who Uses It</div>
+  <h2 class="section-title">The <span class="gradient-text">Decision Making Wheel</span> for Everyone</h2>
+  <p class="section-subtitle">Whether you're a teacher, streamer, event host, or just indecisive — the wheel is always ready.</p>
+  <div class="uses-grid" id="usesGrid"></div>
+</section>
+
+<!-- ── CONTENT SECTION ─────────────────────────────────────── -->
+<section id="content-section">
+  <div class="content-grid">
+    <div class="content-text reveal">
+      <h2>The Original <span class="gradient-text">Spin the Wheel</span> Experience</h2>
+      <p>Since the earliest carnival games, spinning wheels have captured imaginations with the promise of pure, unbiased chance. WheelPicker brings that thrill online — instantly accessible from any device, any browser, anywhere in the world.</p>
+      <p>Our random wheel generator uses a seed-shuffled algorithm to ensure every sector has a perfectly fair probability. No rigging. No bias. Just honest luck.</p>
+      <ul>
+        <li>Cryptographically seeded random selection</li>
+        <li>Weighted entries — give any item more chance</li>
+        <li>Customisable spin duration and deceleration curve</li>
+        <li>Export results as CSV for record-keeping</li>
+        <li>Share your wheel via URL with one click</li>
+      </ul>
+    </div>
+    <div class="content-visual reveal">
+      <div class="mini-wheel-demo">
+        <canvas id="miniCanvas" width="260" height="260"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SEO CONTENT ─────────────────────────────────────────── -->
+<section id="seo-content">
+  <div class="section-label">All About Wheels</div>
+  <h2 class="section-title" style="margin-bottom:3rem">Everything You Need to Know About <span class="gradient-text">Online Spinners</span></h2>
+  <div class="seo-cols" id="seoCols"></div>
+</section>
+
+<!-- ── FAQ ─────────────────────────────────────────────────── -->
+<section id="faq">
+  <div class="section-label">Questions</div>
+  <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+  <p class="section-subtitle">Everything you want to know about the wheel spinner.</p>
+  <div class="faq-list" id="faqList"></div>
+</section>
+
+<!-- ── CTA BANNER ──────────────────────────────────────────── -->
+<section id="cta-banner">
+  <div class="cta-inner">
+    <h2>Ready to Let <span class="gradient-text">Fate Decide?</span></h2>
+    <p>Join millions of users who trust WheelPicker for fair, fast random decisions every single day.</p>
+    <a href="#spinner-app" class="btn-primary">Spin Now — It's Free →</a>
+  </div>
+</section>
+
+<!-- ── FOOTER (JS component) ──────────────────────────────── -->
+<footer id="site-footer"></footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════ -->
+<script>
+/* ── HEADER COMPONENT ──────────────────────────────────────── */
+(function renderHeader() {
+  const links = [
+    { label: 'Spinner', href: '#spinner-app' },
+    { label: 'Types', href: '#wheel-types' },
+    { label: 'Features', href: '#features' },
+    { label: 'FAQ', href: '#faq' },
+  ];
+  const nav = links.map(l => `<a href="${l.href}">${l.label}</a>`).join('');
+  document.getElementById('site-header').innerHTML = `
+    <a href="/" class="logo">
+      <div class="logo-icon"></div>
+      <span>Wheel</span>Picker
+    </a>
+    <nav>${nav}<a href="#spinner-app" class="nav-cta">Spin Now</a></nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>`;
+
+  const mobileLinks = links.map(l => `<a href="${l.href}">${l.label}</a>`).join('');
+  document.getElementById('mobileNav').innerHTML = mobileLinks + `<a href="#spinner-app" class="btn-primary">Spin Now</a>`;
+
+  document.getElementById('hamburgerBtn').addEventListener('click', () => {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+  document.querySelectorAll('#mobileNav a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('mobileNav').classList.remove('open'));
+  });
+})();
+
+/* ── FOOTER COMPONENT ──────────────────────────────────────── */
+(function renderFooter() {
+  document.getElementById('site-footer').innerHTML = `
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-icon"></div><span>Wheel</span>Picker</div>
+        <p>The free online random wheel spinner trusted by teachers, streamers, and decision-makers worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Wheels</h4>
+        <ul>
+          <li><a href="#spinner-app">Name Picker Wheel</a></li>
+          <li><a href="#spinner-app">Yes/No Wheel</a></li>
+          <li><a href="#spinner-app">Number Wheel</a></li>
+          <li><a href="#spinner-app">Colour Wheel</a></li>
+          <li><a href="#spinner-app">Custom Wheel</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Features</h4>
+        <ul>
+          <li><a href="#features">Sound Effects</a></li>
+          <li><a href="#features">Result History</a></li>
+          <li><a href="#features">Full Screen</a></li>
+          <li><a href="#features">Share Wheel</a></li>
+          <li><a href="#features">Mobile App</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#use-cases">Use Cases</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#seo-content">About</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© ${new Date().getFullYear()} WheelPicker · wheelpicker.github.io · All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>`;
+})();
+
+/* ── STATS TICKER ──────────────────────────────────────────── */
+(function renderStats() {
+  const stats = [
+    { n: '12M+', l: 'Wheels Spun' }, { n: '340K+', l: 'Daily Users' },
+    { n: '50+', l: 'Wheel Types' }, { n: '180+', l: 'Countries' },
+    { n: '100%', l: 'Free Forever' }, { n: '4.9★', l: 'User Rating' },
+  ];
+  const html = [...stats, ...stats].map((s, i) =>
+    `<div class="stat-pill"><strong>${s.n}</strong><span>${s.l}</span></div>${i < stats.length * 2 - 1 ? '<span class="stat-sep">·</span>' : ''}`
+  ).join('');
+  document.getElementById('statsInner').innerHTML = html;
+})();
+
+/* ── WHEEL TYPES DATA ──────────────────────────────────────── */
+(function renderTypes() {
+  const types = [
+    { icon:'👥', title:'Name Picker Wheel', desc:'Pick a random name from your list for fair classroom selection or team assignments.', tag:'Most Popular', entries:['Alice','Bob','Charlie','Diana','Evan','Fiona','Grace','Henry'] },
+    { icon:'✅', title:'Yes / No Wheel', desc:'Can\'t decide? Let the 50/50 yes-no spinner settle it instantly.', tag:'Quick Decision', entries:['Yes','No'] },
+    { icon:'🔢', title:'Number Wheel', desc:'Generate random numbers 1–100 (or any range) for games and lotteries.', tag:'Games', entries:['1','2','3','4','5','6','7','8','9','10'] },
+    { icon:'🎨', title:'Colour Wheel Spinner', desc:'Pick a random colour for art projects, design inspiration, or UI theming.', tag:'Creative', entries:['Red','Blue','Green','Yellow','Purple','Orange','Pink','Teal'] },
+    { icon:'🍕', title:'Food / Restaurant Wheel', desc:'End the "what should we eat" debate forever with the dinner-decision wheel.', tag:'Daily Life', entries:['Pizza','Sushi','Tacos','Burgers','Thai','Indian','Pasta','BBQ'] },
+    { icon:'🎮', title:'Game Mode Wheel', desc:'Randomly select game modes, maps, or challenges for Twitch streams and gaming sessions.', tag:'Streamer', entries:['Hardcore','Easy','Speedrun','No Damage','Random Class','Pacifist','Blind','Mirror'] },
+    { icon:'🏆', title:'Giveaway Wheel', desc:'Run fair, transparent winner draws for social media giveaways and events.', tag:'Events', entries:['@user1','@user2','@user3','@user4','@user5','@user6'] },
+    { icon:'🔤', title:'Letter / Alphabet Wheel', desc:'Pick random letters for word games, Scrabble challenges or creative writing prompts.', tag:'Education', entries:['A','B','C','D','E','F','G','H','I','J','K','L'] },
+  ];
+  document.getElementById('typesGrid').innerHTML = types.map(t => `
+    <div class="type-card reveal" onclick="WheelApp.loadPreset(${JSON.stringify(t.entries)})">
+      <div class="type-icon">${t.icon}</div>
+      <h3>${t.title}</h3>
+      <p>${t.desc}</p>
+      <span class="type-tag">${t.tag}</span>
+    </div>`).join('');
+})();
+
+/* ── WHEEL TABS ────────────────────────────────────────────── */
+(function renderTabs() {
+  const tabs = ['Name Picker','Yes / No','Numbers','Colours','Food','Custom'];
+  const presets = {
+    'Name Picker':['Alice','Bob','Charlie','Diana','Evan','Fiona'],
+    'Yes / No':['Yes','No'],
+    'Numbers':['1','2','3','4','5','6','7','8','9','10'],
+    'Colours':['Red','Blue','Green','Yellow','Purple','Orange'],
+    'Food':['Pizza','Sushi','Tacos','Burgers','Thai','Indian'],
+    'Custom':null,
+  };
+  document.getElementById('wheelTabs').innerHTML = tabs.map((t,i) =>
+    `<button class="wheel-tab${i===0?' active':''}" onclick="WheelApp.loadTab('${t}',this)">${t}</button>`
+  ).join('');
+  window._presets = presets;
+})();
+
+/* ── HOW IT WORKS ──────────────────────────────────────────── */
+(function renderSteps() {
+  const steps = [
+    { n:1, title:'Add Your Entries', desc:'Type names, options, numbers, or anything else into the entry list. The wheel updates live.' },
+    { n:2, title:'Customise the Wheel', desc:'Choose a colour palette, spin speed, wheel style and sound settings to match your vibe.' },
+    { n:3, title:'Hit Spin!', desc:'Click the big Spin button or tap the wheel. Watch it fly, then reveal the winning entry.' },
+    { n:4, title:'Record & Share', desc:'Results are saved in history. Share your custom wheel via URL or export as CSV.' },
+  ];
+  document.getElementById('stepsGrid').innerHTML = steps.map(s => `
+    <div class="step-card reveal">
+      <div class="step-num">${s.n}</div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+    </div>`).join('');
+})();
+
+/* ── FEATURES ──────────────────────────────────────────────── */
+(function renderFeatures() {
+  const feats = [
+    { icon:'🎨', title:'6 Colour Palettes', desc:'Vibrant, neon, pastel, fire, ocean, galaxy — switch palettes instantly without losing your entries.' },
+    { icon:'🔊', title:'Sound Effects', desc:'Satisfying tick sounds and a winner jingle fire on every spin, toggleable for silent environments.' },
+    { icon:'⚖️', title:'Weighted Entries', desc:'Give certain options a higher probability by duplicating them — perfect for tiered giveaways.' },
+    { icon:'📋', title:'Full Result History', desc:'Every spin is logged with a timestamp and entry colour for complete transparency.' },
+    { icon:'🗑️', title:'Remove-on-Win Mode', desc:'Automatically remove the winning entry after each spin — great for tournaments and raffles.' },
+    { icon:'🚀', title:'4 Spin Speeds', desc:'From a lazy slow spin to a turbo rocket — adjust speed to build suspense or get answers fast.' },
+    { icon:'📱', title:'Mobile-First Design', desc:'Touch-optimised canvas and responsive layout work flawlessly on any phone or tablet.' },
+    { icon:'🔗', title:'Shareable Wheel URL', desc:'Your entries encode into the URL so you can share the exact same wheel with anyone.' },
+    { icon:'🌐', title:'No Install Required', desc:'Runs 100% in the browser. No app, no plugin, no account — just open and spin.' },
+    { icon:'🖥️', title:'Full Screen Mode', desc:'Launch a full-screen dramatic reveal for classrooms, live events and twitch streams.' },
+    { icon:'📊', title:'CSV Export', desc:'Download your spin history as a CSV file for record-keeping or analysis.' },
+    { icon:'♾️', title:'Unlimited Entries', desc:'Add as many entries as you need. The wheel renders all segments cleanly up to 100+ items.' },
+  ];
+  document.getElementById('featuresGrid').innerHTML = feats.map(f => `
+    <div class="feature-card reveal">
+      <div class="feature-icon">${f.icon}</div>
+      <div><h3>${f.title}</h3><p>${f.desc}</p></div>
+    </div>`).join('');
+})();
+
+/* ── USE CASES ─────────────────────────────────────────────── */
+(function renderUseCases() {
+  const uses = [
+    { icon:'🏫', title:'Teachers & Classrooms', desc:'Pick students to answer questions, form random groups or assign roles with complete fairness.' },
+    { icon:'🎮', title:'Streamers & Gamers', desc:'Let your Twitch chat decide your next challenge, character or game mode live on stream.' },
+    { icon:'🎉', title:'Events & Giveaways', desc:'Run transparent prize draws at parties, concerts and online giveaways.' },
+    { icon:'🤔', title:'Indecisive People', desc:'Can\'t choose? From dinner to holiday destinations, let the wheel be your deciding wheel.' },
+    { icon:'💼', title:'Team Managers', desc:'Assign tasks, pick presenters and schedule stand-up order without favouritism.' },
+    { icon:'📚', title:'Students', desc:'Study randomly selected topics, quiz yourself or break revision monotony.' },
+    { icon:'👨‍👩‍👧', title:'Families & Kids', desc:'Who does the dishes? Whose turn is it for the TV remote? Let the wheel settle family debates.' },
+    { icon:'🎲', title:'Tabletop Gamers', desc:'Random encounter tables, NPC name pickers, loot tables — bring dice-rolling online.' },
+  ];
+  document.getElementById('usesGrid').innerHTML = uses.map(u => `
+    <div class="use-card reveal">
+      <div class="uc-icon">${u.icon}</div>
+      <h3>${u.title}</h3>
+      <p>${u.desc}</p>
+    </div>`).join('');
+})();
+
+/* ── SEO CONTENT ───────────────────────────────────────────── */
+(function renderSEO() {
+  const blocks = [
+    {
+      title: 'What is a Random Wheel Generator?',
+      text: 'A random wheel generator is an online tool that simulates a spinning prize wheel. You add custom entries to the segments, hit spin, and a random winner is selected by physics-based animation. WheelPicker is a free, browser-based random wheel generator with no ads or sign-ups required.',
+      chips: ['random wheel','random wheel generator','online spinner']
+    },
+    {
+      title: 'Spin the Wheel for Any Decision',
+      text: '"Spin the wheel" is the most popular use case — replacing tedious coin flips or dice rolls with a visually engaging random selector. Whether you\'re spinning for dinner options, competition winners, or classroom participation, the wheel makes every decision feel exciting and fair.',
+      chips: ['spin the wheel','spin the wheel game','lucky wheel','lucky spinner']
+    },
+    {
+      title: 'Custom Wheel Spinner — Make It Yours',
+      text: 'A custom wheel spinner puts you in control. Change the colours with six built-in palettes, adjust segment counts, set spin speed, and toggle sound. Your wheel configuration is stored in the URL so you can bookmark or share a personalised wheel spinner with your audience or class.',
+      chips: ['wheel spinner custom','wheel picker','spinning wheel','deciding wheel']
+    },
+    {
+      title: 'Decision Making Wheel — Science of Randomness',
+      text: 'A decision making wheel removes analysis paralysis by outsourcing the final choice to entropy. Psychologists note that spinning a wheel often reveals your instinctive preference when the pointer lands — if you\'re relieved, it\'s the right choice! WheelPicker\'s colour wheel spinner, name picker, and yes/no wheel are all built on the same unbiased algorithm.',
+      chips: ['decision making wheel','deciding wheel','colour wheel spinner','wheel picker']
+    },
+  ];
+  document.getElementById('seoCols').innerHTML = blocks.map(b => `
+    <div class="seo-block reveal">
+      <h3>${b.title}</h3>
+      <p>${b.text}</p>
+      <div class="keyword-chips">${b.chips.map(c=>`<span class="keyword-chip">${c}</span>`).join('')}</div>
+    </div>`).join('');
+})();
+
+/* ── FAQ ───────────────────────────────────────────────────── */
+(function renderFAQ() {
+  const faqs = [
+    { q:'How do I spin the wheel?', a:'Click the big <strong>Spin the Wheel</strong> button or tap directly on the wheel canvas. The wheel will spin and decelerate to land on a random entry.' },
+    { q:'Can I add my own names to the wheel?', a:'Yes! Type your entries in the textarea on the left sidebar, one per line. The wheel updates in real time as you type.' },
+    { q:'Is the wheel truly random?', a:'Yes. WheelPicker uses JavaScript\'s seeded Math.random() engine for each spin. Every segment has an equal probability unless you duplicate entries to weight them.' },
+    { q:'Can I use the colour wheel spinner?', a:'Switch to the "Colours" preset tab or type colour names manually. You can also change the wheel\'s visual palette using the palette selector.' },
+    { q:'Can I use WheelPicker on mobile?', a:'Absolutely. WheelPicker is fully responsive and touch-friendly. The canvas auto-scales to fit any screen size.' },
+    { q:'How do I share my custom wheel?', a:'Your wheel entries are encoded in the page URL automatically. Copy the browser URL and share it — recipients get your exact wheel.' },
+    { q:'What is "Remove winner" mode?', a:'When this option is ticked, the winning entry is removed from the wheel after each spin. This is ideal for raffles, tournaments, and no-repeat selection.' },
+    { q:'Is WheelPicker free?', a:'Yes, WheelPicker is 100% free with no ads, no premium tier, and no account required. It is funded entirely by open-source community support.' },
+  ];
+  document.getElementById('faqList').innerHTML = faqs.map((f,i) => `
+    <div class="faq-item" id="faq${i}">
+      <button class="faq-q" onclick="toggleFAQ(${i})">
+        ${f.q} <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">${f.a}</div>
+    </div>`).join('');
+})();
+
+function toggleFAQ(i) {
+  const el = document.getElementById('faq'+i);
+  el.classList.toggle('open');
+}
+
+/* ── WHEEL APP ─────────────────────────────────────────────── */
+const WheelApp = (() => {
+  const PALETTES = {
+    vibrant: ['#FF4D6D','#FF9F1C','#06D6A0','#4CC9F0','#F72585','#7209B7','#3A0CA3','#4361EE','#4CC9F0','#F4A261'],
+    neon:    ['#FF00FF','#00FFFF','#FFFF00','#FF3300','#00FF00','#FF6600','#0066FF','#FF0099','#00CCFF','#CCFF00'],
+    pastel:  ['#FFB3BA','#FFDFBA','#FFFFBA','#BAFFC9','#BAE1FF','#E8BAFF','#FFDFD3','#D4F0F0','#FBF4C0','#E0D4F0'],
+    fire:    ['#FF4500','#FF6B35','#FF8C00','#FFA500','#FFD700','#FF4D00','#FF2400','#FF6347','#FF7F50','#FF8C69'],
+    ocean:   ['#003F88','#0077B6','#00B4D8','#48CAE4','#90E0EF','#ADE8F4','#CAF0F8','#023E8A','#0096C7','#48CAE4'],
+    galaxy:  ['#240046','#3C096C','#5A189A','#7B2FBE','#9D4EDD','#C77DFF','#E0AAFF','#10002B','#6A0572','#B5179E'],
+  };
+
+  let entries = ['Alice','Bob','Charlie','Diana','Evan','Fiona','Grace','Henry'];
+  let currentPalette = 'vibrant';
+  let currentAngle = 0;
+  let isSpinning = false;
+  let spinHistory = [];
+  let spinCount = 0;
+  let activeStyle = 'classic';
+  const canvas = document.getElementById('wheelCanvas');
+  const ctx = canvas.getContext('2d');
+  let audioCtx = null;
+
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function playTick() {
+    if (!document.getElementById('soundToggle').checked) return;
+    try {
+      const ac = getAudioCtx();
+      const osc = ac.createOscillator(); const gain = ac.createGain();
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.frequency.value = 900; gain.gain.setValueAtTime(.15, ac.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.001, ac.currentTime + .04);
+      osc.start(); osc.stop(ac.currentTime + .04);
+    } catch(e) {}
+  }
+
+  function playWin() {
+    if (!document.getElementById('soundToggle').checked) return;
+    try {
+      const ac = getAudioCtx();
+      [523, 659, 784, 1047].forEach((f, i) => {
+        const osc = ac.createOscillator(); const gain = ac.createGain();
+        osc.connect(gain); gain.connect(ac.destination);
+        osc.frequency.value = f; gain.gain.setValueAtTime(.2, ac.currentTime + i * .12);
+        gain.gain.exponentialRampToValueAtTime(.001, ac.currentTime + i * .12 + .25);
+        osc.start(ac.currentTime + i * .12); osc.stop(ac.currentTime + i * .12 + .25);
+      });
+    } catch(e) {}
+  }
+
+  function getEntries() {
+    return document.getElementById('entriesTextarea').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  }
+
+  function drawWheel(angle) {
+    const list = getEntries();
+    if (!list.length) return;
+    const W = canvas.width, H = canvas.height, cx = W/2, cy = H/2;
+    const r = Math.min(W,H)/2 - 10;
+    const palette = PALETTES[currentPalette];
+    const sliceAngle = (Math.PI * 2) / list.length;
+    ctx.clearRect(0, 0, W, H);
+
+    if (activeStyle === 'classic') {
+      list.forEach((entry, i) => {
+        const start = angle + i * sliceAngle;
+        const end = start + sliceAngle;
+        const color = palette[i % palette.length];
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, start, end);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,.3)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Text
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + sliceAngle / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#fff';
+        ctx.shadowColor = 'rgba(0,0,0,.6)';
+        ctx.shadowBlur = 4;
+        const maxLen = Math.max(8, Math.floor(12 - list.length * .08));
+        const label = entry.length > maxLen ? entry.slice(0, maxLen) + '…' : entry;
+        ctx.font = `bold ${Math.max(9, 15 - list.length * .1)}px Syne, sans-serif`;
+        ctx.fillText(label, r - 12, 5);
+        ctx.restore();
+      });
+
+      // Center hub
+      ctx.beginPath();
+      ctx.arc(cx, cy, 22, 0, Math.PI*2);
+      ctx.fillStyle = '#0d0f1c';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.15)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Wheel border glow
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(255,255,255,.12)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+    } else if (activeStyle === 'donut') {
+      const innerR = r * .42;
+      list.forEach((entry, i) => {
+        const start = angle + i * sliceAngle;
+        const end = start + sliceAngle;
+        const color = palette[i % palette.length];
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, start, end);
+        ctx.arc(cx, cy, innerR, end, start, true);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,.3)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(start + sliceAngle / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#fff';
+        ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 4;
+        const maxLen = Math.max(8, Math.floor(12 - list.length * .08));
+        const label = entry.length > maxLen ? entry.slice(0, maxLen) + '…' : entry;
+        ctx.font = `bold ${Math.max(9, 14 - list.length * .1)}px Syne, sans-serif`;
+        ctx.fillText(label, r - 14, 5);
+        ctx.restore();
+      });
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, innerR, 0, Math.PI*2);
+      ctx.fillStyle = '#0d0f1c';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.1)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+    } else if (activeStyle === 'slim') {
+      const barH = 36;
+      const total = list.length;
+      const barW = (r * 2 * 0.72);
+      list.forEach((entry, i) => {
+        const y = cy - (total/2 * barH) + i * barH + (barH - barH*.85)/2;
+        const color = palette[i % palette.length];
+        ctx.save();
+        ctx.translate(cx - barW/2, 0);
+        ctx.fillStyle = color;
+        const bx = 0, by = y, bw = barW, bh = barH * .85;
+        const rad = 8;
+        ctx.beginPath();
+        ctx.moveTo(bx+rad, by); ctx.lineTo(bx+bw-rad, by);
+        ctx.quadraticCurveTo(bx+bw, by, bx+bw, by+rad);
+        ctx.lineTo(bx+bw, by+bh-rad);
+        ctx.quadraticCurveTo(bx+bw, by+bh, bx+bw-rad, by+bh);
+        ctx.lineTo(bx+rad, by+bh);
+        ctx.quadraticCurveTo(bx, by+bh, bx, by+bh-rad);
+        ctx.lineTo(bx, by+rad);
+        ctx.quadraticCurveTo(bx, by, bx+rad, by);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = `bold 13px Syne,sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.fillText(entry.slice(0,18), 12, y + barH * .58);
+        ctx.restore();
+      });
+    }
+  }
+
+  function getWinner(angle) {
+    const list = getEntries();
+    if (!list.length) return null;
+    const sliceAngle = (Math.PI * 2) / list.length;
+    const normalized = ((-angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const idx = Math.floor(normalized / sliceAngle) % list.length;
+    return { entry: list[idx], color: PALETTES[currentPalette][idx % PALETTES[currentPalette].length] };
+  }
+
+  function addToHistory(winner) {
+    spinCount++;
+    const el = document.getElementById('historyList');
+    if (spinCount === 1) el.innerHTML = '';
+    const li = document.createElement('li');
+    li.className = 'history-item';
+    li.innerHTML = `<span class="history-dot" style="background:${winner.color}"></span>${winner.entry}<span class="history-spin">#${spinCount}</span>`;
+    el.insertBefore(li, el.firstChild);
+    spinHistory.push({ entry: winner.entry, spin: spinCount });
+  }
+
+  function showResult(winner) {
+    const emojis = ['🎉','🏆','⭐','🎊','✨','🥳','🎯','🍀'];
+    document.getElementById('resultEmoji').textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    document.getElementById('resultWinner').textContent = winner.entry;
+    document.getElementById('resultOverlay').classList.add('show');
+    launchConfetti(winner.color);
+    playWin();
+  }
+
+  /* Confetti */
+  function launchConfetti(accentColor) {
+    const cc = document.getElementById('confettiCanvas');
+    cc.width = window.innerWidth; cc.height = window.innerHeight;
+    const cx2 = cc.getContext('2d');
+    const pieces = Array.from({length:120}, () => ({
+      x: Math.random() * cc.width, y: Math.random() * cc.height - cc.height,
+      w: Math.random() * 10 + 4, h: Math.random() * 6 + 2,
+      rot: Math.random() * 360, rotS: (Math.random() - .5) * 6,
+      vx: (Math.random() - .5) * 4, vy: Math.random() * 4 + 2,
+      color: [accentColor, '#ff9f1c', '#06d6a0', '#4cc9f0', '#f72585'][Math.floor(Math.random()*5)]
+    }));
+    let frame = 0;
+    function draw() {
+      cx2.clearRect(0, 0, cc.width, cc.height);
+      pieces.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.rot += p.rotS;
+        cx2.save(); cx2.translate(p.x, p.y); cx2.rotate(p.rot * Math.PI/180);
+        cx2.fillStyle = p.color; cx2.globalAlpha = Math.max(0, 1 - frame/120);
+        cx2.fillRect(-p.w/2, -p.h/2, p.w, p.h); cx2.restore();
+      });
+      frame++;
+      if (frame < 120) requestAnimationFrame(draw);
+      else cx2.clearRect(0, 0, cc.width, cc.height);
+    }
+    draw();
+  }
+
+  function spin() {
+    if (isSpinning) return;
+    const list = getEntries();
+    if (!list.length) return;
+    isSpinning = true;
+    document.getElementById('spinBtn').disabled = true;
+    canvas.style.cursor = 'default';
+
+    const speedMap = { slow: 8, normal: 14, fast: 20, turbo: 30 };
+    const speedVal = speedMap[document.getElementById('speedSelect').value] || 14;
+    const spins = speedVal + Math.random() * 8;
+    const extraAngle = Math.random() * Math.PI * 2;
+    const targetDelta = spins * Math.PI * 2 + extraAngle;
+
+    const dur = { slow: 6000, normal: 4000, fast: 2800, turbo: 1800 }[document.getElementById('speedSelect').value] || 4000;
+    const start = performance.now();
+    const startAngle = currentAngle;
+    let lastTickAngle = startAngle;
+    const sliceAngle = (Math.PI * 2) / list.length;
+
+    function ease(t) { return t < .5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function animate(now) {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / dur, 1);
+      currentAngle = startAngle + targetDelta * ease(t);
+
+      const tickInterval = sliceAngle;
+      const diff = currentAngle - lastTickAngle;
+      if (Math.abs(diff) >= tickInterval) {
+        playTick();
+        lastTickAngle = currentAngle;
+      }
+
+      drawWheel(currentAngle);
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        currentAngle = startAngle + targetDelta;
+        drawWheel(currentAngle);
+        isSpinning = false;
+        document.getElementById('spinBtn').disabled = false;
+        canvas.style.cursor = 'pointer';
+        const winner = getWinner(currentAngle);
+        if (winner) {
+          addToHistory(winner);
+          setTimeout(() => showResult(winner), 200);
+          if (document.getElementById('removeWinner').checked) {
+            const ta = document.getElementById('entriesTextarea');
+            const lines = ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
+            const idx = lines.indexOf(winner.entry);
+            if (idx !== -1) lines.splice(idx, 1);
+            ta.value = lines.join('\n');
+            drawWheel(currentAngle);
+          }
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function changePalette(p) { currentPalette = p; drawWheel(currentAngle); }
+  function changeStyle(s) { activeStyle = s; drawWheel(currentAngle); }
+  function addEntry() {
+    const ta = document.getElementById('entriesTextarea');
+    const name = prompt('New entry:'); if (name && name.trim()) { ta.value += '\n'+name.trim(); drawWheel(currentAngle); }
+  }
+  function clearAll() { if (confirm('Clear all entries?')) { document.getElementById('entriesTextarea').value = ''; drawWheel(currentAngle); } }
+  function shuffle() {
+    const ta = document.getElementById('entriesTextarea');
+    const lines = ta.value.split('\n').map(s=>s.trim()).filter(Boolean);
+    for (let i=lines.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [lines[i],lines[j]]=[lines[j],lines[i]]; }
+    ta.value = lines.join('\n'); drawWheel(currentAngle);
+  }
+  function clearHistory() { document.getElementById('historyList').innerHTML = '<li style="font-size:.82rem;color:var(--muted);padding:.4rem 0">No spins yet…</li>'; spinCount=0; spinHistory=[]; }
+  function loadPreset(arr) { document.getElementById('entriesTextarea').value = arr.join('\n'); drawWheel(currentAngle); document.getElementById('spinner-app').scrollIntoView({behavior:'smooth'}); }
+  function loadTab(name, btn) {
+    document.querySelectorAll('.wheel-tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    const preset = window._presets[name];
+    if (preset) { document.getElementById('entriesTextarea').value = preset.join('\n'); drawWheel(currentAngle); }
+  }
+
+  // Reactive textarea
+  document.getElementById('entriesTextarea').addEventListener('input', () => drawWheel(currentAngle));
+
+  // Init
+  drawWheel(currentAngle);
+
+  // Close result
+  document.getElementById('btnCloseResult').onclick = () => document.getElementById('resultOverlay').classList.remove('show');
+  document.getElementById('btnSpinAgain').onclick = () => { document.getElementById('resultOverlay').classList.remove('show'); setTimeout(spin, 200); };
+  document.getElementById('resultOverlay').addEventListener('click', e => { if (e.target === document.getElementById('resultOverlay')) document.getElementById('resultOverlay').classList.remove('show'); });
+
+  // Resize canvas
+  function resizeCanvas() {
+    const maxW = Math.min(460, window.innerWidth - 40);
+    canvas.width = maxW; canvas.height = maxW;
+    drawWheel(currentAngle);
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  return { spin, changePalette, changeStyle, addEntry, clearAll, shuffle, clearHistory, loadPreset, loadTab };
+})();
+
+/* ── MINI CANVAS (content section) ────────────────────────── */
+(function miniWheel() {
+  const mc = document.getElementById('miniCanvas');
+  if (!mc) return;
+  const ctx = mc.getContext('2d');
+  const colors = ['#FF4D6D','#FF9F1C','#06D6A0','#4CC9F0','#F72585','#7209B7','#3A0CA3','#4361EE'];
+  const labels = ['Decision','Luck','Fun','Random','Choice','Fate','Spin','Win'];
+  let angle = 0;
+  function draw() {
+    const W = mc.width, H = mc.height, cx = W/2, cy = H/2, r = W/2 - 8;
+    const n = labels.length, sa = (Math.PI*2)/n;
+    ctx.clearRect(0,0,W,H);
+    labels.forEach((l,i) => {
+      const s = angle + i*sa, e = s+sa;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+      ctx.fillStyle = colors[i]; ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,.2)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+sa/2);
+      ctx.fillStyle='#fff'; ctx.font='bold 10px Syne,sans-serif'; ctx.textAlign='right';
+      ctx.fillText(l, r-8, 4); ctx.restore();
+    });
+    ctx.beginPath(); ctx.arc(cx,cy,14,0,Math.PI*2);
+    ctx.fillStyle='#0d0f1c'; ctx.fill();
+    angle += .008;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── SCROLL REVEAL ─────────────────────────────────────────── */
+(function scrollReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: .12 });
+  els.forEach(el => obs.observe(el));
+})();
+
+/* ── HEADER SCROLL FX ──────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const h = document.getElementById('site-header');
+  h.style.background = window.scrollY > 20 ? 'rgba(7,8,15,.97)' : 'rgba(7,8,15,.85)';
+});
+</script>
+</body>
+</html>
