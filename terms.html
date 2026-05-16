@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Use – WheelPicker</title>
+  <meta name="description" content="Terms of Use for WheelPicker. Understand the ground rules for using our free random wheel spinner software application." />
+  <link rel="canonical" href="https://wheelpicker.github.io/terms.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght=0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* ── DESIGN TOKENS (Matched to index configuration) ── */
+    :root {
+      --bg:       #07080f;
+      --bg2:      #0d0f1c;
+      --bg3:      #12152a;
+      --surface:  #181c35;
+      --border:   rgba(255,255,255,.07);
+      --accent:   #ff4d6d;
+      --accent2:  #ff9f1c;
+      --text:     #f0f2ff;
+      --muted:    #7b82a8;
+      --radius:   18px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.7;
+      padding-top: 64px;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .45;
+    }
+
+    /* ── HEADER ── */
+    #site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1rem,4vw,3rem); height: 64px;
+      background: rgba(7,8,15,.85); backdrop-filter: blur(18px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: var(--font-head); font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: conic-gradient(var(--accent) 0 60deg, var(--accent2) 60deg 120deg, #06d6a0 120deg 180deg, #4cc9f0 180deg 240deg, var(--accent) 240deg 300deg, var(--accent2) 300deg 360deg);
+      border-radius: 50%;
+    }
+    .logo span { background: linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    nav a { font-size: .85rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    nav a:hover { color: var(--text); }
+
+    /* ── CONTENT LAYOUT ── */
+    .legal-container {
+      max-width: 800px; margin: 60px auto 100px; padding: 0 1.5rem; position: relative; z-index: 1;
+    }
+    .hero-area { text-align: center; margin-bottom: 3.5rem; }
+    .hero-area h1 { font-family: var(--font-head); font-weight: 800; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -.03em; margin-bottom: 1rem; }
+    .hero-area h1 span { background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .last-updated { color: var(--muted); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase; }
+
+    .content-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; }
+    .content-box h2 { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; margin: 2rem 0 0.8rem; color: var(--text); }
+    .content-box h2:first-of-type { margin-top: 0; }
+    .content-box p { color: var(--muted); margin-bottom: 1.2rem; font-size: .95rem; }
+    .content-box ul { margin-left: 1.5rem; margin-bottom: 1.2rem; color: var(--muted); font-size: .95rem; }
+    .content-box li { margin-bottom: .5rem; }
+
+    /* Decorative Orb */
+    .orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(80px); opacity: .06; z-index: 0; width: 500px; height: 500px; background: var(--accent2); bottom: 10%; right: -200px; }
+
+    /* ── FOOTER ── */
+    #site-footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; margin-top: auto; font-size: .85rem; color: var(--muted); position: relative; z-index: 1; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; }
+    .footer-links a { transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="orb"></div>
+
+  <!-- ── HEADER (JS component) ──────────────────────────────── -->
+<header id="site-header"></header>
+<nav class="mobile-nav" id="mobileNav"></nav>
+
+  <main class="legal-container">
+    <div class="hero-area">
+      <h1>Terms of <span>Use</span></h1>
+      <p class="last-updated">Last Updated: May 16, 2026</p>
+    </div>
+
+    <div class="content-box">
+      <p>Welcome to WheelPicker. By interacting with our web canvas layout, components, scripts, or application templates, you agree to comply with and be bound by the following Terms of Use.</p>
+
+      <h2>1. Acceptance of Terms</h2>
+      <p>Access to WheelPicker is provided completely free of charge without mandatory registration barriers. By visiting or generating custom wheels on this site, you formally acknowledge that you accept these legal terms in full.</p>
+
+      <h2>2. Permitted Educational & Personal Use</h2>
+      <p>WheelPicker is intended to facilitate randomized decisions for classrooms, prize giveaways, entertainment, and generic casual gaming. You are free to utilize the randomizer for private streams, video presentations, or instructional events.</p>
+
+      <h2>3. Prohibited Conduct</h2>
+      <p>You agree not to attempt malicious vectors against the platform structure, including but not limited to:</p>
+      <ul>
+        <li>Automated denial-of-service tactics or scripting designed to artificially overload rendering speeds.</li>
+        <li>Embedding or hardcoding our application assets into frames with malicious or predatory intent.</li>
+        <li>Using inputted entry labels to spread hate speech, illegal threats, or abusive strings in public stream broadcasts while presenting our service branding.</li>
+      </ul>
+
+      <h2>4. Randomization & Disclaimer of Warranties</h2>
+      <p>While WheelPicker uses high-performance mathematical algorithms (`Math.random()`) to secure uniform distribution models for each mechanical spin slice, our random calculations are presented entirely "as-is". We render no absolute guarantee that specific spin mechanics are secure enough for binding legal arbitration, financial stakes, high-value real-world property draws, or institutional lotteries.</p>
+
+      <h2>5. Limitation of Liability</h2>
+      <p>Under no standard context shall WheelPicker organizers be liable to any user or entity for unexpected algorithmic outcomes, lost metrics, or strategic errors arising from any configuration choice generated on our custom wheel panels.</p>
+    </div>
+  </main>
+
+  <!-- ── FOOTER (JS component) ──────────────────────────────── -->
+<footer id="site-footer"></footer>
+
+<script src="header.js"></script>
+<script src="footer.js"></script>
+</body>
+</html>
