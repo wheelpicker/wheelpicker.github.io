@@ -776,87 +776,14 @@ Henry</textarea>
 <!-- ── FOOTER (JS component) ──────────────────────────────── -->
 <footer id="site-footer"></footer>
 
+<script src="header.js"></script>
+<script src="footer.js"></script>
+
 <!-- ═══════════════════════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════════════════════════ -->
 <script>
 /* ── HEADER COMPONENT ──────────────────────────────────────── */
-(function renderHeader() {
-  const links = [
-    { label: 'Spinner', href: '#spinner-app' },
-    { label: 'Types', href: '#wheel-types' },
-    { label: 'Features', href: '#features' },
-    { label: 'FAQ', href: '#faq' },
-  ];
-  const nav = links.map(l => `<a href="${l.href}">${l.label}</a>`).join('');
-  document.getElementById('site-header').innerHTML = `
-    <a href="/" class="logo">
-      <div class="logo-icon"></div>
-      <span>Wheel</span>Picker
-    </a>
-    <nav>${nav}<a href="#spinner-app" class="nav-cta">Spin Now</a></nav>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>`;
-
-  const mobileLinks = links.map(l => `<a href="${l.href}">${l.label}</a>`).join('');
-  document.getElementById('mobileNav').innerHTML = mobileLinks + `<a href="#spinner-app" class="btn-primary">Spin Now</a>`;
-
-  document.getElementById('hamburgerBtn').addEventListener('click', () => {
-    document.getElementById('mobileNav').classList.toggle('open');
-  });
-  document.querySelectorAll('#mobileNav a').forEach(a => {
-    a.addEventListener('click', () => document.getElementById('mobileNav').classList.remove('open'));
-  });
-})();
-
-/* ── FOOTER COMPONENT ──────────────────────────────────────── */
-(function renderFooter() {
-  document.getElementById('site-footer').innerHTML = `
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo"><div class="logo-icon"></div><span>Wheel</span>Picker</div>
-        <p>The free online random wheel spinner trusted by teachers, streamers, and decision-makers worldwide.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Wheels</h4>
-        <ul>
-          <li><a href="#spinner-app">Name Picker Wheel</a></li>
-          <li><a href="#spinner-app">Yes/No Wheel</a></li>
-          <li><a href="#spinner-app">Number Wheel</a></li>
-          <li><a href="#spinner-app">Colour Wheel</a></li>
-          <li><a href="#spinner-app">Custom Wheel</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Features</h4>
-        <ul>
-          <li><a href="#features">Sound Effects</a></li>
-          <li><a href="#features">Result History</a></li>
-          <li><a href="#features">Full Screen</a></li>
-          <li><a href="#features">Share Wheel</a></li>
-          <li><a href="#features">Mobile App</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Info</h4>
-        <ul>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#use-cases">Use Cases</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#seo-content">About</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© ${new Date().getFullYear()} WheelPicker · wheelpicker.github.io · All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
-      </div>
-    </div>`;
-})();
 
 /* ── STATS TICKER ──────────────────────────────────────────── */
 (function renderStats() {
