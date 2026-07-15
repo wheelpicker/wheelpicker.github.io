@@ -1,0 +1,55 @@
+(function () {
+  var year = new Date().getFullYear();
+
+  var footerHTML = ''
+    + '<footer class="site-footer">'
+    + '  <div class="container">'
+    + '    <div class="footer-grid">'
+    + '      <div class="footer-brand">'
+    + '        <a href="/" class="brand" style="color:#fff;margin-bottom:12px;display:flex;"><span class="brand-mark" aria-hidden="true"></span>Color Wheel Picker</a>'
+    + '        <p>A free color wheel picker and spin wheel network: pick colors, spin a random wheel, and settle any decision in seconds.</p>'
+    + '      </div>'
+    + '      <div class="footer-col">'
+    + '        <h4>Tools</h4>'
+    + '        <ul>'
+    + '          <li><a href="#wheel-tool">Color Wheel Picker</a></li>'
+    + '          <li><a href="#wheel-network">Yes or No Wheel</a></li>'
+    + '          <li><a href="#wheel-network">Random Number Wheel</a></li>'
+    + '          <li><a href="#wheel-network">Name Picker Wheel</a></li>'
+    + '        </ul>'
+    + '      </div>'
+    + '      <div class="footer-col">'
+    + '        <h4>Explore</h4>'
+    + '        <ul>'
+    + '          <li><a href="#how-it-works">How it Works</a></li>'
+    + '          <li><a href="#features">Features</a></li>'
+    + '          <li><a href="#use-cases">Use Cases</a></li>'
+    + '          <li><a href="#faq">FAQ</a></li>'
+    + '        </ul>'
+    + '      </div>'
+    + '      <div class="footer-col">'
+    + '        <h4>Site</h4>'
+    + '        <ul>'
+    + '          <li><a href="#hero">About</a></li>'
+    + '          <li><a href="#faq">Contact</a></li>'
+    + '          <li><a href="#faq">Privacy</a></li>'
+    + '          <li><a href="#faq">Terms</a></li>'
+    + '        </ul>'
+    + '      </div>'
+    + '    </div>'
+    + '    <div class="footer-bottom">'
+    + '      <span>&copy; ' + year + ' Color Wheel Picker. All rights reserved.</span>'
+    + '      <div class="footer-socials">'
+    + '        <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4 4 0 0 0-6.9 3.7A11.5 11.5 0 0 1 3.6 4.6a4 4 0 0 0 1.2 5.4c-.6 0-1.2-.2-1.8-.5v.1a4 4 0 0 0 3.3 4 4 4 0 0 1-1.8.1 4 4 0 0 0 3.8 2.8A8 8 0 0 1 2 18.4a11.4 11.4 0 0 0 6.3 1.9c7.5 0 11.7-6.4 11.7-11.9v-.5c.8-.6 1.5-1.3 2-2z"/></svg></a>'
+    + '        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>'
+    + '        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.2-.4-4.7a2.9 2.9 0 0 0-2-2C17.9 5 12 5 12 5s-5.9 0-7.6.3a2.9 2.9 0 0 0-2 2C2 8.8 2 12 2 12s0 3.2.4 4.7a2.9 2.9 0 0 0 2 2C6.1 19 12 19 12 19s5.9 0 7.6-.3a2.9 2.9 0 0 0 2-2C22 15.2 22 12 22 12zM10 15.5v-7l6 3.5-6 3.5z"/></svg></a>'
+    + '      </div>'
+    + '    </div>'
+    + '  </div>'
+    + '</footer>';
+
+  var mount = document.getElementById('footer');
+  if (mount) {
+    mount.innerHTML = footerHTML;
+  }
+})();
